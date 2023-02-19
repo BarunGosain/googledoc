@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-8 mx-auto">
+            <div class="formsSaveBox my-3 d-flex justify-content-start">
+                <button type="button" class="btn btn-secondary rounded-circle" (click)="saveInJson()" title="Save" ><!-- [disabled]="!quesAnsForm.valid" --> 
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+
+                <button type="button" class="btn btn-secondary rounded-circle ms-2" (click)="addQuesAnsFormInstance()" title="Add New Question">
+                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                </button>
+                
+            </div>
+            <form [formGroup]="quesAnsForm"> 
+                <div formArrayName="formElements">
+                    <div class="card mb-3" *ngFor="let questionInstance of quesAnsFormInstance.controls; let i = index" [formGroupName]="i">
+                        <div class="card-header">
+                            <div class="row g-3">
+                                <div class="col-sm-12 col-md-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="question" formControlName="label" placeholder="Enter Question">
+                                        <label for="question">Question</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                  <div class="form-floating">
+                                        <select #controltype class="form-select" id="controltype" formControlName="controltype" (change)="onSelectControl(i, controltype)">
+                                            <option value="paragraph">Paragraph</option>
+                                            <option value="radio">Multiple chioce</option>
+                                        </select>
+                                        <label for="controltype">Control Type</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-sm-12 col-md-12">
+                                    <div id="answerBlock">
+                                        <div class="form-floating" *ngIf="!checkControl; else radioControls">
+                                            <textarea class="form-control" id="answerPara" rows="3" readonly></textarea>
+                                            <label for="answerPara" class="form-label">Long answer text...</label>
+                                        </div>
+                                        <ng-template #radioControls>
+                                            <div formArrayName="options">
+                                                <div class="input-group mb-3" *ngFor="let option of optionsInstanceControl.controls; let j = index" [formGroupName]="j">                                                    
+                                                    <div class="input-group-text">
+                                                      <input class="form-check-input mt-0" type="radio" value="" disabled>
+                                                    </div>
+                                                    <input type="text" class="form-control" formControlName="optlabel">
+                                                    <div class="input-group-text" *ngIf="j>0">
+                                                        <i class="fa fa-times" aria-hidden="true" (click)="removeOptionsInstance(j)"></i>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                            <button type="button" class="btn btn-link" (click)="addOptionsInstance()">Add more optiion..</button>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                           </div>                        
+                        </div>
+                        <div class="card-footer" *ngIf="i>0">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary rounded-circle  ms-auto" (click)="removeQuesAnsFormInstance(i)">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
